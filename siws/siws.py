@@ -335,7 +335,7 @@ class SiwsMessage(BaseModel):
             signature_bytes = base58.b58decode(signature)
             verify_key.verify(message, signature_bytes)
         except BadSignatureError as e:
-            raise exceptions.InvalidSignature from e
+            raise InvalidSignature() from e
 
 
 def check_contract_wallet_signature(

@@ -13,6 +13,7 @@ repository = "https://github.com/Aspect26/siws-py-2"
 keywords = ["SIWS", "EIP-4361", "Sign-In with Solana", "Spruce ID"]
 
 [tool.poetry.dependencies]
+base58 = "=2.1.1"
 python = ">=3.8,<4.0"
 abnf = ">=2.2,<3"
 web3 = ">=7.3.0,<8"

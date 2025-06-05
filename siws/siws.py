@@ -1,5 +1,6 @@
 """Main module for SIWS messages construction and validation."""
 
+import base58
 import secrets
 import string
 from datetime import datetime, timezone
@@ -167,7 +168,7 @@ class SiwsMessage(BaseModel):
     """RFC 3986 URI scheme for the authority that is requesting the signing."""
     domain: str = Field(pattern="^[^/?#]+$")
     """RFC 4501 dns authority that is requesting the signing."""
-    address: ChecksumAddress
+    address: str
     """Ethereum address performing the signing conformant to capitalization encoded
     checksum specified in EIP-55 where applicable.
     """
@@ -212,8 +213,12 @@ class SiwsMessage(BaseModel):
     @classmethod
     def address_is_checksum_address(cls, v: str) -> str:
         """Validate the address follows EIP-55 formatting."""
-        if not Web3.is_checksum_address(v):
-            raise ValueError("Message `address` must be in EIP-55 format")
+        try:
+            decoded = base58.b58decode(v)
+        except Exception:
+            raise ValueError("Invalid base58 encoding for Solana address")
+        if len(decoded) != 32:
+            raise ValueError("Solana address must decode to 32 bytes")
         return v
 
     @classmethod

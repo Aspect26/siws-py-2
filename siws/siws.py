@@ -1,4 +1,4 @@
-"""Main module for SIWE messages construction and validation."""
+"""Main module for SIWS messages construction and validation."""
 
 import secrets
 import string
@@ -160,7 +160,7 @@ def utc_now() -> datetime:
     return datetime.now(tz=timezone.utc)
 
 
-class SiweMessage(BaseModel):
+class SiwsMessage(BaseModel):
     """A Sign-in with Ethereum (EIP-4361) message."""
 
     scheme: Optional[str] = None
@@ -217,7 +217,7 @@ class SiweMessage(BaseModel):
         return v
 
     @classmethod
-    def from_message(cls, message: str, abnf: bool = True) -> "SiweMessage":
+    def from_message(cls, message: str, abnf: bool = True) -> "SiwsMessage":
         """Parse a message in its EIP-4361 format."""
         if abnf:
             parsed_message = ABNFParsedMessage(message=message)

@@ -1,7 +1,7 @@
 """Library for EIP-4361 Sign-In with Ethereum."""
 
 # flake8: noqa: F401
-from .siwe import (
+from .siws import (
     DomainMismatch,
     ExpiredMessage,
     InvalidSignature,
@@ -9,7 +9,7 @@ from .siwe import (
     MalformedSession,
     NonceMismatch,
     NotYetValidMessage,
-    SiweMessage,
+    SiwsMessage,
     VerificationError,
     generate_nonce,
 )

@@ -1,4 +1,4 @@
-"""SIWE message parsers."""
+"""SIWS message parsers."""
 
 import re
 
@@ -9,10 +9,10 @@ from .grammars import eip4361
 
 
 class RegExpParsedMessage:
-    """Regex parsed SIWE message."""
+    """Regex parsed SIWS message."""
 
     def __init__(self, message: str):
-        """Parse a SIWE message."""
+        """Parse a SIWS message."""
         expr = re.compile(REGEX_MESSAGE)
         match = re.match(REGEX_MESSAGE, message)
 
@@ -38,10 +38,10 @@ class RegExpParsedMessage:
 
 
 class ABNFParsedMessage:
-    """ABNF parsed SIWE message."""
+    """ABNF parsed SIWS message."""
 
     def __init__(self, message: str):
-        """Parse a SIWE message."""
+        """Parse a SIWS message."""
         parser = eip4361.Rule("sign-in-with-ethereum")
         try:
             node = parser.parse_all(message)

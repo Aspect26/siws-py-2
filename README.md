@@ -9,7 +9,7 @@ This package provides a Python implementation of EIP-4361: Sign In With Ethereum
 SIWE can be easily installed in any Python project with pip:
 
 ```bash
-pip install siwe
+pip install siws
 ```
 
 ## Usage
@@ -21,8 +21,9 @@ SIWE provides a `SiweMessage` class which implements EIP-4361.
 Parsing is done by initializing a `SiweMessage` object with an EIP-4361 formatted string:
 
 ```python
-from siwe import SiweMessage
-message = SiweMessage.from_message(message=eip_4361_string)
+from siws import SiwsMessage
+
+message = SiwsMessage.from_message(message=eip_4361_string)
 ```
 
 Or to initialize a `SiweMessage` as a `pydantic.BaseModel` right away:

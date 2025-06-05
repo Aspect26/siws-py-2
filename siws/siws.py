@@ -19,6 +19,8 @@ from pydantic import (
     TypeAdapter,
     field_validator,
 )
+from nacl.exceptions import BadSignatureError
+from nacl.signing import VerifyKey
 from pydantic_core import core_schema
 from typing_extensions import Annotated
 from web3 import HTTPProvider, Web3
@@ -239,7 +241,7 @@ class SiwsMessage(BaseModel):
 
         :return: EIP-4361 formatted message, ready for EIP-191 signing.
         """
-        header = f"{self.domain} wants you to sign in with your Ethereum account:"
+        header = f"{self.domain} wants you to sign in with your Solana account:"
         if self.scheme:
             header = f"{self.scheme}://{header}"
 
@@ -308,9 +310,6 @@ class SiwsMessage(BaseModel):
         `WEB3_HTTP_PROVIDER_URI`
         :return: None if the message is valid and raises an exception otherwise
         """
-        message = encode_defunct(text=self.prepare_message())
-        w3 = Web3(provider=provider)
-
         if scheme is not None and self.scheme != scheme:
             raise SchemeMismatch()
         if domain is not None and self.domain != domain:
@@ -330,20 +329,13 @@ class SiwsMessage(BaseModel):
         ):
             raise NotYetValidMessage()
 
+        message = self.prepare_message().encode()
         try:
-            address = w3.eth.account.recover_message(message, signature=signature)
-        except (ValueError, IndexError):
-            address = None
-        except eth_utils.exceptions.ValidationError:
-            raise InvalidSignature from None
-
-        if address != self.address and (
-            provider is None
-            or not check_contract_wallet_signature(
-                address=self.address, message=message, signature=signature, w3=w3
-            )
-        ):
-            raise InvalidSignature()
+            verify_key = VerifyKey(base58.b58decode(self.address))
+            signature_bytes = base58.b58decode(signature)
+            verify_key.verify(message, signature_bytes)
+        except BadSignatureError as e:
+            raise exceptions.InvalidSignature from e
 
 
 def check_contract_wallet_signature(

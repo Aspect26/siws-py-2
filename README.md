@@ -1,3 +1,5 @@
+Disclaimer: this is just a fork of https://github.com/spruceid/siwe-py with grammar changed to support siws intead of siwe :)
+
 # Sign-In with Ethereum
 
 This package provides a Python implementation of EIP-4361: Sign In With Ethereum.

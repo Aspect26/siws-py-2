@@ -42,7 +42,7 @@ class ABNFParsedMessage:
 
     def __init__(self, message: str):
         """Parse a SIWS message."""
-        parser = eip4361.Rule("sign-in-with-ethereum")
+        parser = eip4361.Rule("sign-in-with-solana")
         try:
             node = parser.parse_all(message)
         except abnf.ParseError as e:
